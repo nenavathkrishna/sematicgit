@@ -1,0 +1,203 @@
+{
+  "name": "SalesPOC",
+  "compatibilityLevel": 1550,
+  "model": {
+    "culture": "en-US",
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "discourageImplicitMeasures": true,
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "FactSales",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "formatString": "Long Date"
+          },
+          {
+            "name": "ProductID",
+            "dataType": "int64",
+            "sourceColumn": "ProductID",
+            "summarizeBy": "none",
+            "formatString": "0"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "sourceColumn": "Amount",
+            "summarizeBy": "sum",
+            "formatString": "\\$#,##0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactSales",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #table(",
+                "        type table [Date = date, ProductID = Int64.Type, Amount = number],",
+                "        {",
+                "            {#date(2026,1,1), 1, 100},",
+                "            {#date(2026,1,2), 2, 250},",
+                "            {#date(2026,1,3), 1, 175},",
+                "            {#date(2026,2,1), 3, 300},",
+                "            {#date(2026,2,15), 2, 220},",
+                "            {#date(2026,3,3), 1, 90}",
+                "        }",
+                "    )",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Sales",
+            "expression": "SUM(FactSales[Amount])",
+            "formatString": "\\$#,##0"
+          },
+          {
+            "name": "Avg Sale",
+            "expression": "AVERAGE(FactSales[Amount])",
+            "formatString": "\\$#,##0"
+          },
+          {
+            "name": "Sales YTD",
+            "expression": "TOTALYTD([Total Sales], DimDate[Date])",
+            "formatString": "\\$#,##0"
+          }
+        ]
+      },
+      {
+        "name": "DimProduct",
+        "columns": [
+          {
+            "name": "ProductID",
+            "dataType": "int64",
+            "sourceColumn": "ProductID",
+            "summarizeBy": "none",
+            "formatString": "0"
+          },
+          {
+            "name": "Product",
+            "dataType": "string",
+            "sourceColumn": "Product",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimProduct",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #table(",
+                "        type table [ProductID = Int64.Type, Product = text, Category = text],",
+                "        {",
+                "            {1, \"Widget\", \"Hardware\"},",
+                "            {2, \"Gadget\", \"Hardware\"},",
+                "            {3, \"Service A\", \"Services\"}",
+                "        }",
+                "    )",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "DimDate",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "formatString": "Long Date",
+            "dataCategory": "PaddedDateTableDates",
+            "isKey": false
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year",
+            "summarizeBy": "none",
+            "formatString": "0"
+          },
+          {
+            "name": "MonthNo",
+            "dataType": "int64",
+            "sourceColumn": "MonthNo",
+            "summarizeBy": "none",
+            "formatString": "0"
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimDate",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Dates = List.Dates(#date(2026,1,1), 120, #duration(1,0,0,0)),",
+                "    ToTable = Table.FromList(Dates, Splitter.SplitByNothing(), {\"Date\"}),",
+                "    TypeDate = Table.TransformColumnTypes(ToTable, {{\"Date\", type date}}),",
+                "    AddYear = Table.AddColumn(TypeDate, \"Year\", each Date.Year([Date]), Int64.Type),",
+                "    AddMonthNo = Table.AddColumn(AddYear, \"MonthNo\", each Date.Month([Date]), Int64.Type),",
+                "    AddMonth = Table.AddColumn(AddMonthNo, \"MonthName\", each Date.MonthName([Date]), type text)",
+                "in",
+                "    AddMonth"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "d2b440cb-c0c6-4b75-87ab-5fdc11c49050",
+        "fromTable": "FactSales",
+        "fromColumn": "ProductID",
+        "toTable": "DimProduct",
+        "toColumn": "ProductID"
+      },
+      {
+        "name": "f38df83e-7a56-4d75-b388-923c47d758f9",
+        "fromTable": "FactSales",
+        "fromColumn": "Date",
+        "toTable": "DimDate",
+        "toColumn": "Date"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"FactSales\",\"DimProduct\",\"DimDate\"]"
+      }
+    ]
+  }
+}

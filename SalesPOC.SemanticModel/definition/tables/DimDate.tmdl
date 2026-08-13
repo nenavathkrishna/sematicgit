@@ -1,0 +1,51 @@
+table DimDate
+	lineageTag: 79b96fcc-1843-4c23-bfb0-a28aad6a9ca5
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 58bdec17-b320-4ec0-ab70-cacdbca6ddea
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e504e84-d30e-4bbd-918f-ee3fa733ffd9
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo
+		dataType: int64
+		formatString: 0
+		lineageTag: dd9191ab-195f-4b1b-af37-e064d0445d8d
+		summarizeBy: none
+		sourceColumn: MonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		dataType: string
+		lineageTag: 110571b2-6781-4d24-9d8b-3025feb2a372
+		summarizeBy: none
+		sourceColumn: MonthName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Dates = List.Dates(#date(2026,1,1), 120, #duration(1,0,0,0)),
+				    ToTable = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
+				    TypeDate = Table.TransformColumnTypes(ToTable, {{"Date", type date}}),
+				    AddYear = Table.AddColumn(TypeDate, "Year", each Date.Year([Date]), Int64.Type),
+				    AddMonthNo = Table.AddColumn(AddYear, "MonthNo", each Date.Month([Date]), Int64.Type),
+				    AddMonth = Table.AddColumn(AddMonthNo, "MonthName", each Date.MonthName([Date]), type text)
+				in
+				    AddMonth

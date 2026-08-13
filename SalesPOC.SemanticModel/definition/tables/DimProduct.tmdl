@@ -1,0 +1,42 @@
+table DimProduct
+	lineageTag: 977a2752-b708-462b-9acb-8804c1b0dd27
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 97c6f8e5-37b0-4dc3-b18a-9e16c102a160
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 15b305b7-203a-4930-95d0-d5007de5f7cd
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 6f3257ee-8202-4d19-9f55-2cc9818688ff
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		source =
+				let
+				    Source = #table(
+				        type table [ProductID = Int64.Type, Product = text, Category = text],
+				        {
+				            {1, "Widget", "Hardware"},
+				            {2, "Gadget", "Hardware"},
+				            {3, "Service A", "Services"}
+				        }
+				    )
+				in
+				    Source
