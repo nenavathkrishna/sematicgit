@@ -13,6 +13,10 @@ table FactSales
 		formatString: \$#,##0
 		lineageTag: 92742e95-f49b-4cd1-9f3d-51d2ec3ec9cd
 
+	measure 'Total Margin' = SUMX(FactSales, FactSales[Amount] * 0.3)
+		formatString: \$#,##0
+		lineageTag: 3b71a479-5548-4f70-82ea-ac6cca725275
+
 	column Date
 		dataType: dateTime
 		formatString: Long Date
