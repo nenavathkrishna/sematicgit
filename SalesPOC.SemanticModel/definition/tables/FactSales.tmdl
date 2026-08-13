@@ -17,9 +17,6 @@ table FactSales
 		formatString: \$#,##0
 		lineageTag: 3b71a479-5548-4f70-82ea-ac6cca725275
 
-	measure 'Margin %' = DIVIDE([Total Margin], [Total Sales])
-		formatString: 0.0%
-		lineageTag: a1f4c9d2-6b83-4e57-9c20-5d7e1f0a8b34
 
 	column Date
 		dataType: dateTime
