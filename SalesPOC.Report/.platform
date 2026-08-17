@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "SalesPOC"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4f2f80b7-55c9-4cd3-b9f8-5025bb2a6c89"
+  }
+}
