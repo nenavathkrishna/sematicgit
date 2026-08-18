@@ -9,3 +9,4 @@ model Model
 ref table FactSales
 ref table DimProduct
 ref table DimDate
+ref table 'Key Measures'

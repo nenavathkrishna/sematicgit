@@ -1,9 +1,6 @@
 table FactSales
 	lineageTag: ea722b40-08d4-4c75-9a61-53c6f2d36d2a
 
-	measure 'Total Sales' = SUM(FactSales[Amount])
-		formatString: \$#,##0
-		lineageTag: b03c347f-bfda-46a7-ad8b-24f40c6ea49d
 
 	measure 'Avg Sale' = AVERAGE(FactSales[Amount])
 		formatString: \$#,##0
