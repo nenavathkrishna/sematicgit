@@ -1,0 +1,124 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/reportExtension/1.0.0/schema.json",
+  "name": "extension",
+  "entities": [
+    {
+      "name": "EmployeeHeadcount",
+      "measures": [
+        {
+          "name": "PercentToTarget",
+          "dataType": "Double",
+          "expression": "DIVIDE(SUM(EmployeeHeadcount[ActualHeadcount]),SUM(EmployeeHeadcount[TargetHeadcount]))",
+          "formatString": "0\\ %;-0\\ %;0\\ %"
+        },
+        {
+          "name": "PercentToTargetColor",
+          "dataType": "Text",
+          "expression": "If(NOT(IsBlank(EmployeeHeadcount[PercentToTarget])),If(EmployeeHeadcount[PercentToTarget] >= 1.05, \"#D9B300\", IF(EmployeeHeadcount[PercentToTarget] < .95, \"#CD4C46\")))",
+          "formatString": "General Number",
+          "references": {
+            "measures": [
+              {
+                "schema": "extension",
+                "entity": "EmployeeHeadcount",
+                "name": "PercentToTarget"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Measures -> Job Operations",
+      "measures": [
+        {
+          "name": "Business Days MTD",
+          "dataType": "Double",
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_MTH]=\"Y\", DimCalendar[MTD]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
+          "formatString": "General Number"
+        },
+        {
+          "name": "Business Days YTD",
+          "dataType": "Double",
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_YEAR]=\"Y\", DimCalendar[YTD]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
+          "formatString": "General Number"
+        },
+        {
+          "name": "Business Days This Month",
+          "dataType": "Double",
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_MTH]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
+          "formatString": "General Number"
+        },
+        {
+          "name": "Business Days This Year",
+          "dataType": "Double",
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_YEAR]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
+          "formatString": "General Number"
+        },
+        {
+          "name": "Direct Hrs Projected This Month",
+          "dataType": "Double",
+          "expression": "IF(DAY(TODAY()) <= 10,DIVIDE([Direct Hrs R10],[Business Days R10])*[Business Days This Month],DIVIDE([Direct Hrs MTD],[Business Days MTD])*[Business Days This Month])",
+          "formatString": "#,0",
+          "references": {
+            "measures": [
+              {
+                "entity": "Measures -> Job Operations",
+                "name": "Direct Hrs R10"
+              },
+              {
+                "schema": "extension",
+                "entity": "Measures -> Job Operations",
+                "name": "Business Days R10"
+              },
+              {
+                "schema": "extension",
+                "entity": "Measures -> Job Operations",
+                "name": "Business Days This Month"
+              },
+              {
+                "entity": "Measures -> Job Operations",
+                "name": "Direct Hrs MTD"
+              },
+              {
+                "schema": "extension",
+                "entity": "Measures -> Job Operations",
+                "name": "Business Days MTD"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Direct Hrs Projected This Year",
+          "dataType": "Double",
+          "expression": "DIVIDE([Direct Hrs YTD],[Business Days YTD])*[Business Days This Year]",
+          "formatString": "#,0",
+          "references": {
+            "measures": [
+              {
+                "entity": "Measures -> Job Operations",
+                "name": "Direct Hrs YTD"
+              },
+              {
+                "schema": "extension",
+                "entity": "Measures -> Job Operations",
+                "name": "Business Days YTD"
+              },
+              {
+                "schema": "extension",
+                "entity": "Measures -> Job Operations",
+                "name": "Business Days This Year"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Business Days R10",
+          "dataType": "Double",
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[Rolling10]=1, DimCalendar[IsWeekday]=TRUE)",
+          "formatString": "General Number"
+        }
+      ]
+    }
+  ]
+}
