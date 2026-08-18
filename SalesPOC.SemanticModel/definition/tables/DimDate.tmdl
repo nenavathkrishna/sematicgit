@@ -2,6 +2,10 @@ table DimDate
 	lineageTag: 79b96fcc-1843-4c23-bfb0-a28aad6a9ca5
 	dataCategory: Time
 
+	measure 'order count' = COUNTROWS(FactSales)
+		formatString: 0
+		lineageTag: 71068e23-edee-4b6a-bd5f-8db56c03d836
+
 	column Date
 		dataType: dateTime
 		formatString: Long Date
