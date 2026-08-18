@@ -1,7 +1,6 @@
 table FactSales
 	lineageTag: ea722b40-08d4-4c75-9a61-53c6f2d36d2a
 
-
 	measure 'Avg Sale' = AVERAGE(FactSales[Amount])
 		formatString: \$#,##0
 		lineageTag: a9e51d0e-8528-4ef9-8a95-0cfb15be4962
@@ -14,7 +13,6 @@ table FactSales
 		formatString: \$#,##0
 		lineageTag: 3b71a479-5548-4f70-82ea-ac6cca725275
 
-
 	column Date
 		dataType: dateTime
 		formatString: Long Date
@@ -23,6 +21,8 @@ table FactSales
 		sourceColumn: Date
 
 		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	column ProductID
 		dataType: int64
@@ -59,3 +59,4 @@ table FactSales
 				    )
 				in
 				    Source
+

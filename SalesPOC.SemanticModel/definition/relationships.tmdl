@@ -5,3 +5,4 @@ relationship 375058c2-eb3c-4ec5-b936-e547786b784a
 relationship b631bea3-33d7-4322-a5ee-5f2d748cb97f
 	fromColumn: FactSales.Date
 	toColumn: DimDate.Date
+
