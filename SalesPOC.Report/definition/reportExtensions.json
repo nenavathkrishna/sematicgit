@@ -15,7 +15,6 @@
           "name": "PercentToTargetColor",
           "dataType": "Text",
           "expression": "If(NOT(IsBlank(EmployeeHeadcount[PercentToTarget])),If(EmployeeHeadcount[PercentToTarget] >= 1.05, \"#D9B300\", IF(EmployeeHeadcount[PercentToTarget] < .95, \"#CD4C46\")))",
-          "formatString": "General Number",
           "references": {
             "measures": [
               {
@@ -34,26 +33,22 @@
         {
           "name": "Business Days MTD",
           "dataType": "Double",
-          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_MTH]=\"Y\", DimCalendar[MTD]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
-          "formatString": "General Number"
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_MTH]=\"Y\", DimCalendar[MTD]=\"Y\", DimCalendar[IsWeekday]=TRUE)"
         },
         {
           "name": "Business Days YTD",
           "dataType": "Double",
-          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_YEAR]=\"Y\", DimCalendar[YTD]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
-          "formatString": "General Number"
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_YEAR]=\"Y\", DimCalendar[YTD]=\"Y\", DimCalendar[IsWeekday]=TRUE)"
         },
         {
           "name": "Business Days This Month",
           "dataType": "Double",
-          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_MTH]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
-          "formatString": "General Number"
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_MTH]=\"Y\", DimCalendar[IsWeekday]=TRUE)"
         },
         {
           "name": "Business Days This Year",
           "dataType": "Double",
-          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_YEAR]=\"Y\", DimCalendar[IsWeekday]=TRUE)",
-          "formatString": "General Number"
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[CURRENT_YEAR]=\"Y\", DimCalendar[IsWeekday]=TRUE)"
         },
         {
           "name": "Direct Hrs Projected This Month",
@@ -115,8 +110,7 @@
         {
           "name": "Business Days R10",
           "dataType": "Double",
-          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[Rolling10]=1, DimCalendar[IsWeekday]=TRUE)",
-          "formatString": "General Number"
+          "expression": "CALCULATE(COUNT(DimCalendar[Date]),DimCalendar[Rolling10]=1, DimCalendar[IsWeekday]=TRUE)"
         }
       ]
     }
